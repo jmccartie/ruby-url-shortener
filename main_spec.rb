@@ -23,6 +23,14 @@ describe 'App' do
     @id = Base62.encode(link.id)
   end
 
+  it "should properly encode base62" do
+    'lYGhA16ahyf'.should eq(Base62.encode(18446744073709551615))
+  end
+
+  it "should properly decode base62" do
+    '18446744073709551615'.should eq(Base62.decode('lYGhA16ahyf'))
+  end
+
   it "creates a new link entry with a valid request" do
     lambda do
       get "create?url=http%3A%2F%2Fgoogle.com%2F&pw=#{PASSWORD}"
@@ -52,7 +60,6 @@ describe 'App' do
     get "/#{@id}"
     follow_redirect!
     last_request.url.should eq(@target)
-    last_response.should be_ok
   end
 
   it "records a new view when a URL is requested" do
@@ -62,12 +69,5 @@ describe 'App' do
     end.should change(View, :count).by(1)
   end
 
-  it "should properly encode base62" do
-    'lYGhA16ahyf'.should eq(Base62.encode(18446744073709551615))
-  end
-
-  it "should properly decode base62" do
-    '18446744073709551615'.should eq(Base62.decode('lYGhA16ahyf'))
-  end
 
 end

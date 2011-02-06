@@ -36,11 +36,6 @@ DataMapper.auto_upgrade!
 
 
 # APPLICATION
-get "/" do
-  content_type :json
-  { :key1 => 'value1', :key2 => 'value2' }.to_json
-end
-
 get '/create' do
   content_type :json
   return 400, { "error" => 'Url Missing' }.to_json unless params[:url]
@@ -50,7 +45,7 @@ get '/create' do
     :target => params[:url],
     :created_at => Time.now
   )
-  link = "#{request.scheme}://#{request.host}/#{@link.id}"
+  link = "#{request.scheme}://#{request.host}/#{Base62.encode(@link.id)}"
 
   if params[:callback] == "true"
     "short_callback({\"short_url\":\"#{link}\"})"
