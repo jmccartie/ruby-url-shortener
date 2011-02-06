@@ -14,7 +14,8 @@
   - @links.each do |l|
     %tr
       %td= l.id
-      %td= l.target
+      %td
+        %a{:href => l.target, :target => "_blank"}= l.target
       %td= l.views.count
       %td= l.views.last ? l.views.last.created_at.strftime("%b %e, %Y %l:%M%P") : "--"
       %td= l.created_at.strftime("%b %e, %Y %l:%M%P")
