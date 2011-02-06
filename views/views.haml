@@ -1,20 +1,20 @@
 %h1 Views
 %table{:width => "100%"}
-	%tr
-		%td
-			%a{:href => "?order=id"} ID
-		%td
-			%a{:href => "?order=target"} URL
-		%td
-			%a{:href => "#"} Views
-		%td
-			%a{:href => "#"} Last Click
-		%td
-			%a{:href => "#"} Created
-	- @links.each do |l|
-		%tr
-			%td= l.id
-			%td= l.target
-			%td= l.views.count
-			%td= l.views.last ? l.views.last.created_at.strftime("%b %e, %Y %l:%M%P") : "--"
-			%td= l.created_at.strftime("%b %e, %Y %l:%M%P")
+  %tr
+    %td
+      %a{:href => "?order=id"} ID
+    %td
+      %a{:href => "?order=target"} URL
+    %td
+      %a{:href => "#"} Views
+    %td
+      %a{:href => "#"} Last Click
+    %td
+      %a{:href => "#"} Created
+  - @links.each do |l|
+    %tr
+      %td= l.id
+      %td= l.target
+      %td= l.views.count
+      %td= l.views.last ? l.views.last.created_at.strftime("%b %e, %Y %l:%M%P") : "--"
+      %td= l.created_at.strftime("%b %e, %Y %l:%M%P")

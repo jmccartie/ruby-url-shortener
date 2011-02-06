@@ -10,7 +10,6 @@ require 'config/constants'
 hash = YAML.load(File.open("config/database.yml"))
 DataMapper.setup(:default, hash[ENV['RACK_ENV']])
 
-
 class Link
   include DataMapper::Resource
   has n, :views
@@ -33,7 +32,6 @@ end
 
 # DataMapper.auto_migrate!
 DataMapper.auto_upgrade!
-
 
 # APPLICATION
 get '/create' do
@@ -78,5 +76,6 @@ get '/:id' do |id|
 
   # Redirect
   @link = Link.get(link_id)
+  return 404 if @link.nil?
   redirect @link.target
 end
