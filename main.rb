@@ -5,6 +5,7 @@ require 'dm-migrations'
 require 'base62'
 require 'json'
 require 'config/constants'
+require 'link_to'
 
 # DATABASE SETUP
 hash = YAML.load(File.open("config/database.yml"))
@@ -59,6 +60,12 @@ get '/create' do
   end
 end
 
+get '/views' do
+  @sort = params[:order] ||= "id"
+  @links = Link.all(:order => [ @sort.to_sym.desc ], :limit => 50)
+  haml :views
+end
+
 get '/:id' do |id|
   link_id = Base62.decode(id)
 
@@ -74,8 +81,3 @@ get '/:id' do |id|
   @link = Link.get(link_id)
   redirect @link.target
 end
-
-get '/views' do
-  "View reports will go here"
-end
-
