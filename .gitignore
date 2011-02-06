@@ -1,1 +1,3 @@
 config/database.yml
+Capfile
+config/deploy.rb
