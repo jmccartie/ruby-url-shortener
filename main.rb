@@ -5,7 +5,6 @@ require 'dm-migrations'
 require 'base62'
 require 'json'
 require 'config/constants'
-require 'link_to'
 
 # DATABASE SETUP
 hash = YAML.load(File.open("config/database.yml"))
