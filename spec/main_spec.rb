@@ -1,6 +1,6 @@
-require 'main'
+require_relative '../main'
 require 'rack/test'
-require 'factory_girl'
+require 'factory_bot'
 require "factories"
 require "json"
 
@@ -17,56 +17,60 @@ describe 'App' do
     Sinatra::Application
   end
 
+  before(:all) do
+    ENV['PASSWORD'] = "please"
+  end
+
   def create_link(target = "http://google.com/")
     @target = target
-    link = Factory.create(:link, :target => @target)
+    link = FactoryBot.create(:link, :target => @target)
     @id = Base62.encode(link.id)
   end
 
   it "should properly encode base62" do
-    'lYGhA16ahyf'.should eq(Base62.encode(18446744073709551615))
+    expect(Base62.encode(18446744073709551615)).to eq 'lYGhA16ahyf'
   end
 
   it "should properly decode base62" do
-    '18446744073709551615'.should eq(Base62.decode('lYGhA16ahyf'))
+    expect(Base62.decode('lYGhA16ahyf')).to eq '18446744073709551615'
   end
 
   it "creates a new link entry with a valid request" do
-    lambda do
-      get "create?url=http%3A%2F%2Fgoogle.com%2F&pw=#{PASSWORD}"
-    end.should change(Link, :count).by(1)
+    expect {
+      get "create?url=http%3A%2F%2Fgoogle.com%2F&pw=please"
+    }.to change(Link, :count).by(1)
   end
 
   it "should return JSON-encoded url by default" do
-    get "create?url=http%3A%2F%2Fgoogle.com%2F&pw=#{PASSWORD}"
+    get "create?url=http%3A%2F%2Fgoogle.com%2F&pw=please"
     expected = "{\"shortUrl\":\"http://example.org/1\"}"
-    last_response.body.should eq(expected)
+    expect(expected).to eq(last_response.body)
   end
 
   it "should return a callback if requested" do
-    get "create?url=http%3A%2F%2Fgoogle.com%2F&pw=#{PASSWORD}&callback=true"
+    get "create?url=http%3A%2F%2Fgoogle.com%2F&pw=please&callback=true"
     expected = "short_callback({\"short_url\":\"http://example.org/1\"})"
-    last_response.body.should eq(expected)
+    expect(expected).to eq last_response.body
   end
 
   it "should return plain text if requested" do
-    get "create?url=http%3A%2F%2Fgoogle.com%2F&pw=#{PASSWORD}&text=true"
+    get "create?url=http%3A%2F%2Fgoogle.com%2F&pw=please&text=true"
     expected = "http://example.org/1"
-    last_response.body.should eq(expected)
+    expect(expected).to eq last_response.body
   end
 
   it "should redirect if a short url is requested" do
     create_link
     get "/#{@id}"
     follow_redirect!
-    last_request.url.should eq(@target)
+    expect(@target).to eq last_request.url
   end
 
   it "records a new view when a URL is requested" do
-    lambda do
+    expect {
       create_link
       get "/#{@id}"
-    end.should change(View, :count).by(1)
+    }.to change(View, :count).by(1)
   end
 
 

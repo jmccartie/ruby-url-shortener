@@ -1,8 +1,0 @@
-require 'main'
-
-# log = File.new("log/sinatra.log", "w")
-# STDOUT.reopen(log)
-# STDERR.reopen(log)
-
-set :environment, :production
-run Sinatra::Application

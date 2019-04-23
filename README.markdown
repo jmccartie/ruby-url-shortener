@@ -10,10 +10,12 @@ Installation
 2. Change the password in config/constants
 3. Change the database info in config/database.yml
 4. Startup app
-ruby -rubygems config.ru
+
+    ruby main.rb
 
 or using Shotgun (gem install shotgun):
-shotgun config.ru -p 4567 # For Ruby 1.9.2, add -I.
+
+    shotgun config.ru -p 4567 # For Ruby 1.9.2, add -I.
 
 Testing
 =======

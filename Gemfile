@@ -1,13 +1,14 @@
+ruby '2.5.3'
 source 'http://rubygems.org'
 
 gem "sinatra"
 gem "datamapper"
 gem 'json'
-gem 'dm-mysql-adapter'
-gem 'haml'
+gem 'dm-postgres-adapter'
+gem 'slim'
 
 group :test do
   gem "rspec"
   gem "rack-test"
-  gem "factory_girl"
+  gem "factory_bot"
 end

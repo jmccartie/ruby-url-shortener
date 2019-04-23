@@ -1,29 +1,15 @@
 development:
-  adapter: mysql
-  encoding: utf8
+  adapter: postgres
   reconnect: false
   database: short_url_development
   pool: 5
-  username: root
-  password:
-  socket: /tmp/mysql.sock
 
 test:
-  adapter: mysql
-  encoding: utf8
+  adapter: postgres
   reconnect: false
   database: short_url_test
-  pool: 5
-  username: root
-  password:
-  socket: /tmp/mysql.sock
 
 production:
-  adapter: mysql
-  encoding: utf8
+  adapter: postgres
   reconnect: false
-  database: short_url_production
-  pool: 5
-  username: root
-  password:
-  socket: /tmp/mysql.sock
+  url: ENV['DATABASE_URL']

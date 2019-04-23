@@ -2,13 +2,13 @@ require 'rubygems'
 require 'sinatra'
 require 'dm-core'
 require 'dm-migrations'
-require 'base62'
 require 'json'
-require 'config/constants'
+require_relative 'base62'
 
 # DATABASE SETUP
 hash = YAML.load(File.open("config/database.yml"))
-DataMapper.setup(:default, hash[ENV['RACK_ENV']])
+env = ENV['RACK_ENV'] || 'development'
+DataMapper.setup(:default, hash[env])
 
 class Link
   include DataMapper::Resource
@@ -37,7 +37,7 @@ DataMapper.auto_upgrade!
 get '/create' do
   content_type :json
   return 400, { "error" => 'Url Missing' }.to_json unless params[:url]
-  return 401, { "error" => "Wrong password"}.to_json unless params[:pw] == PASSWORD
+  return 401, { "error" => "Wrong password"}.to_json unless params[:pw] == ENV['PASSWORD']
 
   @link = Link.create(
     :target => params[:url],
@@ -60,7 +60,7 @@ end
 get '/views' do
   @sort = params[:order] ||= "id"
   @links = Link.all(:order => [ @sort.to_sym.desc ], :limit => 50)
-  haml :views
+  slim :views
 end
 
 get '/:id' do |id|
